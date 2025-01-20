@@ -1,0 +1,2 @@
+fastapi==0.115.6
+sse_starlette==2.2.1
