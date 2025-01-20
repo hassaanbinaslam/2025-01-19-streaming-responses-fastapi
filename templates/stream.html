@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streaming Demo</title>
+</head>
+
+<body>
+    <h1>FastAPI Streaming Response Demo</h1>
+    <div id="response-container"></div>
+    <script>
+        async function streamResponse() {
+            try {
+                const response = await fetch('/stream');
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+
+                while (true) {
+                    const { value, done } = await reader.read();
+                    if (done) break;
+
+                    const text = decoder.decode(value);
+                    const container = document.getElementById('response-container');
+                    container.innerText += text;
+                }
+            } catch (error) {
+                console.error('Streaming error:', error);
+            }
+        }
+
+        // Start streaming when page loads
+        streamResponse();
+    </script>
+</body>
+
+</html>

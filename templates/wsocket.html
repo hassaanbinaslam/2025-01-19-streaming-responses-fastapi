@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Demo</title>
+    <style>
+        #response-container {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px 0;
+            min-height: 200px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .input-container {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>FastAPI WebSocket Demo</h1>
+    <!-- Make sure this div exists before any messages are sent -->
+    <div id="response-container"></div>
+
+    <div class="input-container">
+        <input type="text" id="messageInput" placeholder="Type a message...">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+    <script>
+        let ws;
+
+        function connectWebSocket() {
+            // Create WebSocket connection
+            ws = new WebSocket(`ws://${window.location.host}/ws`);
+
+            ws.onmessage = function (event) {
+                const container = document.getElementById('response-container');
+                // Add new line for better readability
+                container.innerHTML += event.data + '<br>';
+                // Auto scroll to bottom
+                container.scrollTop = container.scrollHeight;
+            };
+
+            ws.onclose = function (event) {
+                console.log('WebSocket connection closed:', event);
+                // Optionally show connection status to user
+                const container = document.getElementById('response-container');
+                container.innerHTML += '<br>Connection closed<br>';
+            };
+
+            ws.onerror = function (error) {
+                console.error('WebSocket error:', error);
+                // Optionally show error to user
+                const container = document.getElementById('response-container');
+                container.innerHTML += '<br>Error occurred<br>';
+            };
+
+            ws.onopen = function (event) {
+                console.log('WebSocket connection established');
+                // Optionally show connection status to user
+                const container = document.getElementById('response-container');
+                container.innerHTML += 'Connected to server<br>';
+            };
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            if (input.value && ws.readyState === WebSocket.OPEN) {
+                ws.send(input.value);
+                // Optionally show sent message
+                const container = document.getElementById('response-container');
+                container.innerHTML += `Sent: ${input.value}<br>`;
+                input.value = '';
+            }
+        }
+
+        // Add event listener for Enter key
+        document.getElementById('messageInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Connect when page loads
+        connectWebSocket();
+    </script>
+</body>
+
+</html>
