@@ -6,6 +6,8 @@ This repository contains sample code for a blog post [Streaming Responses in Fas
 
 In this blog post, I explore how to stream responses in FastAPI using Server-Sent Events, StreamingResponse, and WebSockets. Through simple examples that simulate LLM outputs, I demonstrate how you can efficiently stream real-time data in your applications.
 
+#FastAPI #Python #Streaming #WebSockets #SSE #RealTime #BackendDevelopment
+
 https://hassaanbinaslam.github.io/myblog/
 
 
